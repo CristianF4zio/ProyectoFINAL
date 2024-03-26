@@ -9,6 +9,7 @@ import { useAuth } from "../../Context/contex";
 
 
 export function Login() {
+
   const { login } = useAuth();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true); // Estado de carga inicialmente true
@@ -30,6 +31,7 @@ const handleLogin = () => {
  
     navigate(registerURL);
 }
+
 const handleacept = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   event.preventDefault();
   if (email === '' || password === '') {
@@ -42,10 +44,16 @@ const handleacept = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent
 			return;
     }
     try {
-      const id = await signInWithEmailAndPasswordAndFetchUserData(email, password);
-      if (id) {
-        login(id, false);
-          navigate('/inicio');
+      const id: any = await signInWithEmailAndPasswordAndFetchUserData(email, password);
+      if (id && id[1]==true && typeof id[0] !== 'string' && typeof id[0] !== 'boolean') {
+        login(id[0], false);
+        document.body.classList.remove('hide-overflow');
+        navigate('/inicio');
+      }
+      else{
+        setError(id[0]);
+        setShowAlert(true);
+
       }
   } catch (error) {
       setError('Error al registrar usuario. Por favor, inténtalo de nuevo más tarde.');

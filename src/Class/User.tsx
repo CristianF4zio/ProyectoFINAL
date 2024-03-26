@@ -2,16 +2,32 @@
 
 export  default class User {
     name: string;
+    lastName: string;
     email: string;
     password: string;
     icon:   string;
     member: boolean;
-    constructor(name: string, email: string, password: string, icon: string, member: boolean) {
+    descrption: string;
+    constructor(name: string,lastname: string,email: string, password: string, icon: string, member: boolean) {
         this.name = name;
+        this.lastName = lastname;
         this.email = email;
         this.password = password;
         this.icon = icon;
         this.member = member;
+        this.descrption = " ";
+    }
+    getDescription() {
+        return this.descrption;
+    }
+    setDescription(description: string) {
+        this.descrption = description;
+    }
+    getLastName() {
+        return this.lastName;
+    }
+    setLastName(lastname: string) {
+        this.lastName = lastname;
     }
     getMember() {
         return this.member;
