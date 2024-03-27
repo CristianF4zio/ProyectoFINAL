@@ -19,11 +19,15 @@ p {
     display: grid;
     grid-template-columns: 1fr 1fr;
     height: 400px;
-
+    padding: auto;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-top: 20px;
     h2 {
         text-align: center;
         color: black;
         font-weight: 900;
+        font-size: 50px;
     }
 
     p {
@@ -73,6 +77,14 @@ p {
         text-align: center;
         font-weight: 500;
     }
+    
+}
+
+.image{
+    width: 600px;
+    height: 300px;
+    border-radius: 10px ;
+    box-shadow: 2px 2px 1px 2px rgb(0, 0, 0);
 }
 
 /* Responsive Styles */
@@ -80,7 +92,8 @@ p {
 @media (max-width: 1280px) {
     .section-two {
         grid-template-columns: 1fr;
-        height: auto;
+        height: 600px;
+        
     }
 
     .section-three {
@@ -90,6 +103,11 @@ p {
         align-items: center;
         gap: 20px;
         height: auto;
+    }
+    .image{
+        width: 500px;
+        height: 300px;
+    
     }
 }
 

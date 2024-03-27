@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import './home.css'
+import agrupacion from '../../assets/agrupacion.jpg'
+
 export function Home() {
   const urls = [
     'https://www.unimet.edu.ve/wp-content/uploads/2023/12/FOTOS-CAMPUS-2023-24-1-980x653.jpg',
@@ -40,11 +42,11 @@ export function Home() {
 
 
 
-      <div className='section-two'>
-        <p>IMAGEN</p>
+        <div className='section-two'>
+          <img src={agrupacion} className='image' alt="" />
         <div className='info'>
-          <h2 className="text-5xl font-bold">Quienes somos?</h2>
-          <p className="py-6">Somos un grupo diverso de estudiantes comprometidos con el crecimiento personal y colectivo. En nuestra comunidad, fomentamos el liderazgo, la colaboración y el servicio. Nos esforzamos por promover un ambiente inclusivo donde cada voz tenga el poder de generar un cambio positivo. ¡Únete a nosotros para hacer una diferencia en nuestra universidad y más allá!
+          <h2>Quienes somos?</h2>
+          <p >Somos un grupo diverso de estudiantes comprometidos con el crecimiento personal y colectivo. En nuestra comunidad, fomentamos el liderazgo, la colaboración y el servicio. Nos esforzamos por promover un ambiente inclusivo donde cada voz tenga el poder de generar un cambio positivo. ¡Únete a nosotros para hacer una diferencia en nuestra universidad y más allá!
           </p>
         </div>
 
