@@ -1,5 +1,5 @@
 import { SetStateAction, useState } from "react";
-import {  buscarGruposPorPalabras } from "../../components/autent"
+
 
 export function GroupSearch() {
     const [query, setQuery] = useState('');
@@ -11,8 +11,8 @@ export function GroupSearch() {
 
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-        const gruposEncontrados = await buscarGruposPorPalabras(query);
-        setResultados(gruposEncontrados);
+        // const gruposEncontrados = await buscarGruposPorPalabras(query);
+        // setResultados(gruposEncontrados);
     };
 
     return (

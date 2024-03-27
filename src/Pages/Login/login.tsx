@@ -51,12 +51,14 @@ const handleacept = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent
           login(id[0], true);
           
           console.log("entro admin")
+          navigate('/admin');
         }
         else{
           console.log("entro usuario")
         login(id[0], false);
-        }document.body.classList.remove('hide-overflow');
         navigate('/inicio');
+        }document.body.classList.remove('hide-overflow');
+       
       }
       else{
         setError(id[0]);

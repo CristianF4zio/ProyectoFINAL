@@ -5,11 +5,19 @@ export  default class Group {
     description: string;
     members: User[];
     id: string;
-    constructor(name: string, description: string, members: User[], id: string) {
+    icon: string;
+    constructor(name: string, description: string, members: User[], id: string, icon: string) {
         this.name = name;
         this.description = description;
         this.members = members;
         this.id = id;      
+        this.icon = icon;
+    }
+    getIcon() {
+        return this.icon;
+    }
+    setIcon(icon: string) {
+        this.icon = icon;
     }
     getName() {
         return this.name;
