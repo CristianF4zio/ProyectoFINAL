@@ -6,6 +6,7 @@ import { Alert } from "../../components/alert";
 
 import { signInWithEmailAndPasswordAndFetchUserData } from "../../components/autent";
 import { useAuth } from "../../Context/contex";
+import Admin from "../../Class/Admin";
 
 
 export function Login() {
@@ -46,8 +47,15 @@ const handleacept = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent
     try {
       const id: any = await signInWithEmailAndPasswordAndFetchUserData(email, password);
       if (id && id[1]==true && typeof id[0] !== 'string' && typeof id[0] !== 'boolean') {
+        if(id[0] instanceof Admin){
+          login(id[0], true);
+          
+          console.log("entro admin")
+        }
+        else{
+          console.log("entro usuario")
         login(id[0], false);
-        document.body.classList.remove('hide-overflow');
+        }document.body.classList.remove('hide-overflow');
         navigate('/inicio');
       }
       else{

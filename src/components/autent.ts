@@ -1,9 +1,10 @@
-import { collection, doc,  getDoc,  getDocs,  query,  setDoc, updateDoc, where } from "@firebase/firestore";
+import { addDoc, collection, doc,  getDoc,  getDocs,  orderBy,  query,  setDoc, updateDoc, where } from "@firebase/firestore";
 import {   auth, database, storage} from "./firebase"
 import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, updateEmail, verifyBeforeUpdateEmail} from "firebase/auth";
 import User from "../Class/User";
 import { ref, uploadBytes, getDownloadURL } from "@firebase/storage";
 import Group from "../Class/Group";
+import Admin from "../Class/Admin";
 
 
 
@@ -27,6 +28,7 @@ export async function signUp(user: User, n: File): Promise<string | null> {
         }
 
         // Agrega los datos del usuario a la colección "users" en Firestore
+
         await setDoc(doc(collection(database, 'users'), userId), {
             email: user.getEmail(),
             name: user.getName(),
@@ -87,6 +89,7 @@ export async function signInWithEmailAndPasswordAndFetchUserData(email: string, 
         userCredential.user.emailVerified;
     }
    
+
     if (!userCredential.user.emailVerified) {
   
         return  ["El correo electrónico no está verificado, por favor ingresar a su correo y validarlo",false]}
@@ -95,7 +98,15 @@ export async function signInWithEmailAndPasswordAndFetchUserData(email: string, 
   
       // Consultar Firestore para obtener los datos del usuario utilizando el ID
       const userDocRef = doc(database, "users", userId);
+      const adminDocRef= doc(database, "admins", userId);
+      const adminDocSnap = await getDoc(adminDocRef);
       const userDocSnap = await getDoc(userDocRef);
+      if(adminDocSnap.exists()){
+        console.log("hola aparecio admin")
+        const userData = adminDocSnap.data();
+        const admin = new Admin(userData.email, password);
+        return [admin,true];}
+        
       if (userDocSnap.exists()) {
         console.log("hola")
         const userData = userDocSnap.data();
@@ -216,34 +227,45 @@ export async function addGroup(name: string, description: string, members: User[
             description: group.getDescription(),
             members: group.getMembersEmails()
         });
+        const docRef = await addDoc(collection(database, 'groups'), group);
+        const groupId = docRef.id;
+
+        // Actualiza el documento recién creado para agregar el ID
+        await updateDoc(doc(database, 'groups', groupId), {
+            id: groupId
+        });
+
     
         console.log('Grupo agregado correctamente');
     } catch (error) {
         console.error('Error al agregar el grupo:', error);
     }}
 
-    async function obtenerGruposDesdeDB() {
-        const grupos = [];
-    
+
+
+    export async function buscarGruposPorPalabras(queryText: string) {
         try {
-            const querySnapshot = await getDocs(collection(database, 'groups'));
-    
-            for (const docSnap of querySnapshot.docs) {
-                const data = docSnap.data();
-                const { name, description } = data;
-    
-                // Obtener el ID del documento actual
-                const docId = docSnap.id;
-    
-                // Crear un nuevo grupo usando el constructor proporcionado
-                const grupo = new Group(name, description, docId);
-    
-                grupos.push(grupo);
-            }
+            const grupos: any[] = [];
+        
+            // Convertir el texto de búsqueda en un array de palabras
+            const palabras = queryText.trim().split(/\s+/);
+        
+            // Realizar una consulta por cada palabra de búsqueda y fusionar los resultados
+            await Promise.all(palabras.map(async palabra => {
+                const q = query(collection(database, 'groups'), where('name', "in", palabra));
+                const querySnapshot = await getDocs(q);
+                
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    const group = new Group(data.name, data.description, data.members, doc.id);
+                    grupos.push(group);
+                });
+            }));
+            console.log(grupos)
     
             return grupos;
         } catch (error) {
-            console.error("Error al obtener grupos desde la base de datos:", error);
+            console.error("Error al buscar grupos:", error);
             return [];
         }
     }
