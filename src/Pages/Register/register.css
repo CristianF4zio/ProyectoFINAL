@@ -1,0 +1,11 @@
+.container-register {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    color: black;
+    width: 450px;
+    height: 650px;
+    border: 0.3rem solid #023E73;
+    border-radius: 5rem;
+}
