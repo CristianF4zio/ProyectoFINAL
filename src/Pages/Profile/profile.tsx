@@ -61,38 +61,48 @@ export function Profile() {
     // </div>
     // </div>
 
-    <div className="contenedorP ">
+
+    <div className="div">
       {showAlert && <Alert onClose={handleAccept} text={error} />}
       {isLoading ? (
         <div className="loader"></div> // Indicador de carga mientras el fondo se está cargando
       ) : (
-        <div className="carga" style={{ backgroundImage: 'url(https://scontent-fra3-1.xx.fbcdn.net/v/t31.18172-8/16722786_10154118294695899_8023236610765669194_o.jpg?_nc_cat=101&ccb=1-7&_nc_sid=5f2048&_nc_ohc=R-URHiyKjhgAX-qlCoW&_nc_ht=scontent-fra3-1.xx&oh=00_AfAUlz8B2p3DsNMkTwcx4Js82vqjLLGSnvBqME0v86rQmQ&oe=661DE695)' }}>
+        <div className="hero min-h-screen" style={{ backgroundImage: 'url(https://scontent-fra3-1.xx.fbcdn.net/v/t31.18172-8/16722786_10154118294695899_8023236610765669194_o.jpg?_nc_cat=101&ccb=1-7&_nc_sid=5f2048&_nc_ohc=R-URHiyKjhgAX-qlCoW&_nc_ht=scontent-fra3-1.xx&oh=00_AfAUlz8B2p3DsNMkTwcx4Js82vqjLLGSnvBqME0v86rQmQ&oe=661DE695)' }}>
 
-          <h1 >Perfil de Usuario</h1>
+          <div className="hero-overlay bg-opacity-60"></div>
 
-          <div className="tarjetaP ">
-            <h3 className='bienvenida'>Bienvenido {user?.getName()} {user?.getLastName()}</h3>
-            <div className="imagen">
-              <img src={user?.getIcon()} className="imagen" />
+
+          <div className="contenedorP ">
+
+
+
+            <h1 >Perfil de Usuario</h1>
+
+            <div className="tarjetaP ">
+              <h3 className='bienvenida'>Bienvenido {user?.getName()} {user?.getLastName()}</h3>
+              <div className="imagen">
+                <img src={user?.getIcon()} className="imagen" />
+              </div>
+
+              <div className="informacion">
+                <p className='user'>Nombre: <input type='text' className='box' placeholder='Name' value={newname} onChange={(ev) => setNewname(ev.target.value)}></input></p>
+                <p className='user'>Apellido: <input type='text' className='box' placeholder='LastName' value={newlastname} onChange={(ev) => setNewlastname(ev.target.value)}></input></p>
+                <p className='user'>Correo Electronico: <input type='text' className='box' placeholder='Email' value={newemail} onChange={(ev) => setNewemail(ev.target.value)}></input></p>
+
+              </div>
+
+              <div className="ajustes">
+
+                <button className='boton' onClick={handleSummit}>Actualizar perfil</button>
+              </div>
+
             </div>
-
-            <div className="informacion">
-              <p className='user'>Nombre: <input type='text' className='box' placeholder='Name' value={newname} onChange={(ev) => setNewname(ev.target.value)}></input></p>
-              <p className='user'>Apellido: <input type='text' className='box' placeholder='LastName' value={newlastname} onChange={(ev) => setNewlastname(ev.target.value)}></input></p>
-              <p className='user'>Correo Electronico: <input type='text' className='box' placeholder='Email' value={newemail} onChange={(ev) => setNewemail(ev.target.value)}></input></p>
-
-            </div>
-
-            <div className="ajustes">
-
-              <button className='boton' onClick={handleSummit}>Actualizar perfil</button>
-            </div>
-
           </div>
-
         </div>
       )
       }
     </div>
+
+
   )
 }

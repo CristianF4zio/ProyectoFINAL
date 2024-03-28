@@ -1,6 +1,10 @@
+
+
+
 .contenedorP {
-    background-color: white;
     font-weight: 900;
+    color: white;
+    margin-bottom: 20px;
 }
 
 .tarjetaP {
@@ -18,15 +22,17 @@
 .bienvenida {
     font-size: 30px;
     text-align: center;
+    color: black;
 }
 
 .salida {
-   
+
     width: auto;
     height: auto;
 }
-.imagen{
-    
+
+.imagen {
+
     background-color: rosybrown;
 
     display: flex;
@@ -48,11 +54,12 @@
     height: 50px;
     border-radius: 10px;
     color: black;
-    
+
 
 }
-.informacion{
-    
+
+.informacion {
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -61,6 +68,7 @@
     border-radius: 10px;
 
 }
+
 .user {
     color: black;
     display: flex;
@@ -71,12 +79,13 @@
     width: 200px;
     height: 200px;
     border-radius: 10px;
-    
+
 }
-.boton{
+
+.boton {
     background-color: rgb(22, 23, 102);
     color: white;
-    width: auto ;
+    width: auto;
     height: 50px;
     border-radius: 10px;
     margin: auto;
@@ -89,6 +98,5 @@
     cursor: pointer;
     font-weight: 500;
 }
-.carga{
-    opacity: 0.6;
-}
+
+.carga {}
