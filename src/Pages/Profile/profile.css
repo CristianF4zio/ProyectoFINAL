@@ -1,6 +1,6 @@
 .contenedorP {
     background-color: white;
-
+    font-weight: 900;
 }
 
 .tarjetaP {
@@ -87,4 +87,8 @@
     text-align: center;
     font-size: 20px;
     cursor: pointer;
+    font-weight: 500;
+}
+.carga{
+    opacity: 0.6;
 }

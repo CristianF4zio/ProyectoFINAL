@@ -67,14 +67,14 @@ p {
     }
 
     h2 {
-        color: white;
+        color: black;
         font-size: 50px;
         font-weight: 900;
         justify-content: center;
     }
 
     p {
-        color: white;
+        color: black;
         text-align: center;
         font-weight: 500;
     }
@@ -102,7 +102,7 @@ p {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 20px;
+        gap: 40px;
         height: auto;
     }
     .image{
