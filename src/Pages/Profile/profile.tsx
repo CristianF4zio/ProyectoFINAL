@@ -43,11 +43,11 @@ export function Profile() {
     //     </div>
     // </div>
     // </div>
-    <div className="contenedor ">
+    <div className="contenedorP ">
 
       <h1>Perfil de Usuario</h1>
 
-      <div className="tarjeta">
+      <div className="tarjetaP">
         <h3 className='bienvenida'>Bienvenido {user?.getName()} {user?.getLastName()}</h3>
         <div className="imagen">
           <img src={user?.getIcon()} className="imagen" />

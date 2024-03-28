@@ -1,9 +1,9 @@
-.contenedor {
+.contenedorP {
     background-color: white;
 
 }
 
-.tarjeta {
+.tarjetaP {
     background-color: white;
     border: 5px solid rgb(22, 23, 102);
     flex-direction: column;
