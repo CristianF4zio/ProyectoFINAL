@@ -32,7 +32,7 @@ const handleRegister = async (event: React.MouseEvent<HTMLButtonElement, MouseEv
         return;
 }
 const namefile= file?.name;
-    const user = new User(  name, email, password, namefile ||"" , true);
+    const user = new User(  name, lastName ,email, password, namefile ||"" , false);
     const id = file ? signUp(user, file) : null;
     if (await id) {
         console.log("Usuario registrado")

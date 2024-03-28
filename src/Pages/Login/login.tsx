@@ -6,9 +6,11 @@ import { Alert } from "../../components/alert";
 
 import { signInWithEmailAndPasswordAndFetchUserData } from "../../components/autent";
 import { useAuth } from "../../Context/contex";
+import Admin from "../../Class/Admin";
 
 
 export function Login() {
+
   const { login } = useAuth();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true); // Estado de carga inicialmente true
@@ -30,6 +32,7 @@ const handleLogin = () => {
  
     navigate(registerURL);
 }
+
 const handleacept = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   event.preventDefault();
   if (email === '' || password === '') {
@@ -42,10 +45,25 @@ const handleacept = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent
 			return;
     }
     try {
-      const id = await signInWithEmailAndPasswordAndFetchUserData(email, password);
-      if (id) {
-        login(id, false);
-          navigate('/inicio');
+      const id: any = await signInWithEmailAndPasswordAndFetchUserData(email, password);
+      if (id && id[1]==true && typeof id[0] !== 'string' && typeof id[0] !== 'boolean') {
+        if(id[0] instanceof Admin){
+          login(id[0], true);
+          
+          console.log("entro admin")
+          navigate('/admin');
+        }
+        else{
+          console.log("entro usuario")
+        login(id[0], false);
+        navigate('/inicio');
+        }document.body.classList.remove('hide-overflow');
+       
+      }
+      else{
+        setError(id[0]);
+        setShowAlert(true);
+
       }
   } catch (error) {
       setError('Error al registrar usuario. Por favor, inténtalo de nuevo más tarde.');

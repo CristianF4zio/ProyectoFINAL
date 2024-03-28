@@ -35,12 +35,30 @@
 
 .card {
   padding: 2em;
+  display: inline-block;
+  width: calc(33.33% - 4em); /* Divide en 3 columnas */
+  margin: 1.5em;
+  vertical-align: top;
+  text-align: left;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.read-the-docs {
+.card img {
+  max-width: 100%;
+  height: auto;
+}
+
+.card .group-name {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.card .group-icon {
+  margin-bottom: 1em;
+}
+
+.card .group-description {
   color: #888;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 57dd77b481485b2aa69b48b4d0fba5a28fc20b9c
