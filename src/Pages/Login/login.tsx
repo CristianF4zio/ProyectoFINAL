@@ -8,6 +8,7 @@ import { signInWithEmailAndPasswordAndFetchUserData } from "../../components/aut
 import { useAuth } from "../../Context/contex";
 import Admin from "../../Class/Admin";
 import logo from '../../assets/logo.svg'
+
 export function Login() {
 
   const { login } = useAuth();
