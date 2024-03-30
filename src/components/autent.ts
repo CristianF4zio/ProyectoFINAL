@@ -1,3 +1,6 @@
+import { DocumentData } from "@firebase/firestore";
+
+
 import { addDoc, collection, doc,  getDoc,  getDocs,  orderBy,  query,  setDoc, updateDoc, where } from "@firebase/firestore";
 import {   auth, database, storage} from "./firebase"
 import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, updateEmail, verifyBeforeUpdateEmail} from "firebase/auth";
@@ -5,6 +8,7 @@ import User from "../Class/User";
 import { ref, uploadBytes, getDownloadURL } from "@firebase/storage";
 import Group from "../Class/Group";
 import Admin from "../Class/Admin";
+import Topic from "../Class/Topic";
 
 
 
@@ -238,39 +242,94 @@ export async function updateUserProfile( newUserData: User){
 
    }
 }
-export async function addGroup(name: string, description: string, n: File) {
+export async function addGroup(name: string, description: string, n: File, topic: Topic) {
     try {
         // Crea un nuevo grupo con los datos proporcionados
-        const group = new Group(name, description, [], "", n.name);
         const groupData = {
-            name: group.getName(),
-            description: group.getDescription(),
-            members: group.getMembersEmails(),
-            icon: n.name
+            name: name,
+            description: description,
+            members: [], // Asumiendo que aún no tienes miembros
+            icon: n.name,
+            topic: topic.getId() // Asegúrate de que getId() devuelve el ID del tema como una cadena
         };
-        // Agrega el grupo a la colección "groups" en Firestore
-        await setDoc(doc(collection(database, 'groups')), {
-            name: group.getName(),
-            description: group.getDescription(),
-            members: group.getMembersEmails(),
-            icon:n.name
-        });
 
+        // Agrega el grupo a la colección "groups" en Firestore
         const docRef = await addDoc(collection(database, 'groups'), groupData);
-   
+
         const groupId = docRef.id;
-        console.log(groupId)
+        console.log(groupId);
+
+        // Sube la imagen y guarda la referencia
         await uploadImageAndSaveReference('', n, groupId);
+
         // Actualiza el documento recién creado para agregar el ID
         await updateDoc(doc(database, 'groups', groupId), {
             id: groupId
         });
 
-    
         console.log('Grupo agregado correctamente');
     } catch (error) {
         console.error('Error al agregar el grupo:', error);
-    }}
+    }
+}
 
+    export async function mostrarTopic(): Promise<Topic[]> {
+        try {
+            // Obtener una referencia a la colección "topics" en la base de datos
+            const topicsCollection = collection(database, 'topics');
+    
+            // Obtener todos los documentos de la colección "topics"
+            const snapshot = await getDocs(topicsCollection);
 
-
+            // Inicializar una variable para almacenar todos los temas
+            const topics: Topic[] = [];
+    
+            // Iterar sobre cada documento y obtener los temas
+            snapshot.forEach((doc) => {
+                const data = doc.data() as DocumentData;
+                if (data.name) {
+                    const topic = new Topic(data.name as string, data.description as string, doc.id);
+                    topics.push(topic); // Asumiendo que el nombre del tema está en un campo llamado "name"
+                    console.log(topic)
+                }
+            });
+    
+            if (topics.length === 0) {
+                console.log("No se encontraron temas");
+            } else {
+                console.log("Temas recuperados y mostrados exitosamente");
+            }
+    
+            return topics;
+        } catch (error) {
+            console.error("Error al recuperar y mostrar temas:", error);
+            return [];
+        }
+    }
+    
+    export async function uploadTopic(name: string, description: string): Promise<void> {
+        try {
+            // Crear un objeto que representa el tema
+            const topic = {
+                name: name,
+                description: description
+            };
+    
+            // Subir el tema a la colección "topics" en Firestore
+            const docRef = await addDoc(collection(database, 'topics'), topic);
+            
+            // Obtener el ID del documento creado
+            const docId = docRef.id;
+    
+            // Actualizar el documento para agregar el ID
+            await updateDoc(doc(database, 'topics', docId), {
+                id: docId
+            });
+    
+            console.log("ID del documento creado:", docId);
+            console.log("Tema subido correctamente");
+        } catch (error) {
+            console.error("Error al subir el tema:", error);
+            throw error; // Re-lanzar el error para que se maneje en el lugar donde se llama a esta función
+        }
+    }

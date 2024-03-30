@@ -1,17 +1,26 @@
+import Topic from "./Topic";
 import User from "./User";
 
 export  default class Group {
     name: string;
     description: string;
+    topic: Topic;
     members: User[];
     id: string;
     icon: string;
-    constructor(name: string, description: string, members: User[], id: string, icon: string) {
+    constructor(name: string, description: string, members: User[], id: string, icon: string, topic: Topic) {
         this.name = name;
         this.description = description;
         this.members = members;
         this.id = id;      
         this.icon = icon;
+        this.topic = topic;
+    }
+    getTopic() {
+        return this.topic;
+    }
+    setTopic(topic: Topic) {
+        this.topic = topic;
     }
     getIcon() {
         return this.icon;
