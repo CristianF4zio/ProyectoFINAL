@@ -1,6 +1,6 @@
 .contenedorP {
     font-weight: 900;
-    color: white;
+    color: white; /* Cambiado a blanco */
     margin-bottom: 10px; /* Reducir el margen inferior */
 }
 
@@ -19,7 +19,7 @@
 .bienvenida {
     font-size: 30px;
     text-align: center;
-    color: black;
+    color: rgb(255, 255, 255); /* Cambiado a negro */
     margin-bottom: 10px; /* Reducir el margen inferior */
 }
 
@@ -38,7 +38,7 @@
     height: 100px;
     width: 100px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
     margin-bottom: 10px; /* Reducir el margen inferior */
 }
 
@@ -48,7 +48,7 @@
     width: auto;
     height: 50px;
     border-radius: 5px;
-    color: black;
+    color: white; /* Cambiado a blanco */
     margin-bottom: 10px; /* Reducir el margen inferior */
 }
 
@@ -63,7 +63,7 @@
 }
 
 .user {
-    color: black;
+    color: white; /* Cambiado a blanco */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -75,8 +75,8 @@
 }
 
 .boton {
-    background-color: rgb(22, 23, 102);
-    color: white;
+    background-color: rgb(255, 255, 255);
+    color: white; /* Cambiado a blanco */
     width: 200px;
     height: 50px;
     border-radius: 10px;

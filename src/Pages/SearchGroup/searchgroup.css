@@ -1,0 +1,36 @@
+.group-search-container {
+    text-align: center;
+}
+
+.group-search-form {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.group-search-input {
+    border-radius: 20px; /* Hace que los bordes sean curvos */
+    padding: 10px 20px; /* Ajusta el espacio interno para hacer la barra de búsqueda más larga */
+    font-size: 16px; /* Ajusta el tamaño del texto */
+    width: 400px; /* Ajusta la longitud de la barra de búsqueda según sea necesario */
+    border: 1px solid #ccc; /* Añade un borde */
+    margin-right: 8px;
+}
+
+.group-search-input:focus {
+    outline: none; /* Elimina el contorno al enfocar */
+    border-color: #007bff; /* Cambia el color del borde al enfocar */
+}
+
+.group-search-button {
+    border-radius: 20px; /* Hace que los bordes sean curvos */
+    padding: 10px 20px; /* Ajusta el espacio interno */
+    font-size: 16px; /* Ajusta el tamaño del texto */
+    cursor: pointer;
+    background-color: #023E7f; /* Cambia el color de fondo del botón */
+    color: white; /* Cambia el color del texto del botón */
+    border: none; /* Elimina el borde */
+}
+
+.group-search-button:hover {
+    background-color: #023E7f; /* Cambia el color de fondo del botón al pasar el cursor sobre él */
+}

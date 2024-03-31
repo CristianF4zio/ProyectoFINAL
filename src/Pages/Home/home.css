@@ -4,7 +4,7 @@ body {
 
 .bienvenidos {
     color: white;
-    font-size: 50px;
+    font-size: 30px;
     font-weight: 900;
 }
 
@@ -28,7 +28,7 @@ p {
         text-align: center;
         color: black;
         font-weight: 900;
-        font-size: 50px;
+        font-size: 30px;
     }
 
     p {
@@ -68,7 +68,7 @@ p {
 
     h2 {
         color: black;
-        font-size: 50px;
+        font-size: 30px;
         font-weight: 900;
         justify-content: center;
     }
@@ -91,34 +91,12 @@ p {
 /* Responsive Styles */
 
 @media (max-width: 1280px) {
-    .section-two {
-        grid-template-columns: 1fr;
-        height: 600px;
-        
-    }
-
-    .section-three {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 40px;
-        height: auto;
-    }
-    .image{
-        width: 500px;
-        height: 300px;
-    
-    }
-}
-
-@media (max-width: 1424px) {
     .bienvenidos {
-        font-size: 30px;
+        font-size: 20px; /* Reducir el tamaño del texto de bienvenida */
     }
 
     p {
-        font-size: 16px;
+        font-size: 15px; /* Reducir el tamaño del texto de párrafo */
     }
 
     .section-three .tarjeta {
@@ -126,10 +104,32 @@ p {
     }
 
     h2 {
-        font-size: 30px;
+        font-size: 20px; /* Reducir el tamaño del texto de los títulos */
     }
 
     p {
-        font-size: 16px;
+        font-size: 18px; /* Reducir el tamaño del texto de párrafo */
+    }
+}
+
+@media (max-width: 1424px) {
+    .bienvenidos {
+        font-size: 30px; /* Reducir aún más el tamaño del texto de bienvenida */
+    }
+
+    p {
+        font-size: 14px; /* Reducir aún más el tamaño del texto de párrafo */
+    }
+
+    .section-three .tarjeta {
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 30px; /* Reducir aún más el tamaño del texto de los títulos */
+    }
+
+    p {
+        font-size: 14px; /* Reducir aún más el tamaño del texto de párrafo */
     }
 }

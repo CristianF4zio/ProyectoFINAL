@@ -3,36 +3,31 @@
   align-items: center;
   justify-content: center;
   background-color: white;
-  color: black;
+  color: white; /* Cambiado a blanco */
   width: 450px;
   height: 550px;
   border: 0.35rem solid #023E73;
   border-radius: 5rem;
 }
 
-img{
+img {
   width: 50px;
   height: 100px;
-  margin: auto; 
+  margin: auto;
 }
-
-.login {
-  display: absolute;
-}
-
 
 h1 {
   text-align: center;
   font-size: 2rem;
   font-weight: bold;
-
+  color: white; /* Cambiado a blanco */
 }
 
 .google-login-button {
   position: relative;
   top: 1rem;
   border: 2px solid #747474;
-
+  color: white; /* Cambiado a blanco */
 }
 
 .google-icon {
@@ -50,7 +45,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-color: #747474;
+  color: #747474;
   font-size: 20px;
   gap: 5px;
 }
@@ -66,7 +61,6 @@ color: #747474;
 
 .form-btn {
   padding: 10px 15px;
-
   border-radius: 20px;
   border: 0 !important;
   outline: 0 !important;
@@ -84,8 +78,6 @@ color: #747474;
   margin: 0;
   font-size: 20px;
   color: #747474;
-
-
 }
 
 .sign-up-link {
@@ -96,13 +88,11 @@ color: #747474;
   color: #023E73;
   cursor: pointer;
   font-weight: 800;
-
 }
 
 .form-btn {
   margin-top: 1rem;
   padding: 10px 15px;
-
   border-radius: 20px;
   border: 0 !important;
   outline: 0 !important;
