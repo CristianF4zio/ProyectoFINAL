@@ -1,0 +1,46 @@
+.group-card, .search-bar {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  .group-container {
+    margin-top: 20px; /* Ajusta el valor de acuerdo a tus necesidades */
+  }
+  
+  .group-description {
+    color: black; /* Establece el color del texto como negro */
+  }
+  
+  .search-bar-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-bar {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-right: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  .search-input {
+    width: 100%;
+    border: none;
+    outline: none;
+  }
+  
+  .search-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #023E73; /* Color de fondo azul, puedes cambiarlo según tus preferencias */
+    color: white;
+    cursor: pointer;
+    margin-top: -10px; /* Ajuste para alinear verticalmente con la barra de búsqueda */
+  }
+  

@@ -1,10 +1,13 @@
-import { addDoc, collection, doc,  getDoc,  getDocs, query,  setDoc, updateDoc, where } from "@firebase/firestore";
+import { addDoc, collection, doc,  getDoc,  getDocs,   query,  setDoc, updateDoc, where } from "@firebase/firestore";
 import {   auth, database, storage} from "./firebase"
-import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, verifyBeforeUpdateEmail} from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword,  verifyBeforeUpdateEmail} from "firebase/auth";
 import User from "../Class/User";
 import { ref, uploadBytes, getDownloadURL } from "@firebase/storage";
-import Group from "../Class/Group";
+import Group from "../Pages/SearchGroup/Group";
 import Admin from "../Class/Admin";
+
+
+
 export async function signUp(user: User, n: File): Promise<string | null> {
    
     try {
@@ -35,7 +38,7 @@ export async function signUp(user: User, n: File): Promise<string | null> {
         });
 
         // Sube la imagen y guarda la referencia
-        await uploadImageAndSaveReference(userId, n, '');
+        await uploadImageAndSaveReference(userId, n);
         const useraux = auth.currentUser;
         // Envía el correo de verificación
         if(useraux){
@@ -51,46 +54,25 @@ export async function signUp(user: User, n: File): Promise<string | null> {
 }
 
 
-
-async function uploadImageAndSaveReference(userId: string, file: File | null, groupID:string) {
+async function uploadImageAndSaveReference(userId: string, file: File | null) {
     if (!file) {
         console.error("No se proporcionó ningún archivo");
         return;
     }
     try {
         // Sube la imagen a Firebase Storage
-        if(userId){
-            const storageRef = ref(storage, `images/${userId}/${file.name}`);
-            await uploadBytes(storageRef, file);
-            console.log("Entro en user")  
-            const imageUrl = await getDownloadURL(storageRef);
-            await setDoc(doc(database, 'users', userId), {
-                profileImage: imageUrl
-            }, { merge: true }); // Utiliza merge: true para fusionar los datos con los existentes}
-        }
-        if(groupID){
-            console.log("Entro en grupo") 
-            const storageRef = ref(storage, `images/${groupID}/${file.name}`);
-            await uploadBytes(storageRef, file); 
-            const imageUrl = await getDownloadURL(storageRef);
-            await setDoc(doc(database, 'groups', groupID), {
-                profileImage: imageUrl
-            }, { merge: true }); // Utiliza merge: true para fusionar los datos con los existentes
-    
-        
-        }
-
-       
-      
+        const storageRef = ref(storage, `images/${userId}/${file.name}`);
+        await uploadBytes(storageRef, file);
         console.log("Imagen subida a Firebase Storage");
 
         // Obtiene la URL de descarga de la imagen
-    
+        const imageUrl = await getDownloadURL(storageRef);
 
-        
         // Guarda la referencia de la imagen en Firestore
-    
-            console.log("Imagen subida y referencia guardada en Firestore");
+        await setDoc(doc(database, 'users', userId), {
+            profileImage: imageUrl
+        }, { merge: true }); // Utiliza merge: true para fusionar los datos con los existentes
+        console.log("Imagen subida y referencia guardada en Firestore");
     } catch (error) {
         console.error("Error al subir la imagen y guardar la referencia:", error);
     }
@@ -106,9 +88,9 @@ export async function signInWithEmailAndPasswordAndFetchUserData(email: string, 
         await userCredential.user.reload(); // Actualiza los datos del usuario para obtener la información más reciente
         userCredential.user.emailVerified;
     }
+   
 
     if (!userCredential.user.emailVerified) {
-
   
         return  ["El correo electrónico no está verificado, por favor ingresar a su correo y validarlo",false]}
       // Una vez autenticado, obtener el ID del usuario
@@ -119,7 +101,6 @@ export async function signInWithEmailAndPasswordAndFetchUserData(email: string, 
       const adminDocRef= doc(database, "admins", userId);
       const adminDocSnap = await getDoc(adminDocRef);
       const userDocSnap = await getDoc(userDocRef);
-
       if(adminDocSnap.exists()){
         console.log("hola aparecio admin")
         const userData = adminDocSnap.data();
@@ -232,32 +213,24 @@ export async function updateUserProfile( newUserData: User){
    
         } else {""}
      } catch(error){
-        console.log("Error")
+        console.log(".")
+
    }
 }
-export async function addGroup(name: string, description: string, n: File) {
+export async function addGroup(name: string, description: string, members: User[]) {
     try {
         // Crea un nuevo grupo con los datos proporcionados
-        const group = new Group(name, description, [], "", n.name);
-        const groupData = {
-            name: group.getName(),
-            description: group.getDescription(),
-            members: group.getMembersEmails(),
-            icon: n.name
-        };
+        const group = new Group(name, description, members, "");
+    
         // Agrega el grupo a la colección "groups" en Firestore
         await setDoc(doc(collection(database, 'groups')), {
             name: group.getName(),
             description: group.getDescription(),
-            members: group.getMembersEmails(),
-            icon:n.name
+            members: group.getMembersEmails()
         });
-
-        const docRef = await addDoc(collection(database, 'groups'), groupData);
-   
+        const docRef = await addDoc(collection(database, 'groups'), group);
         const groupId = docRef.id;
-        console.log(groupId)
-        await uploadImageAndSaveReference('', n, groupId);
+
         // Actualiza el documento recién creado para agregar el ID
         await updateDoc(doc(database, 'groups', groupId), {
             id: groupId
@@ -270,3 +243,30 @@ export async function addGroup(name: string, description: string, n: File) {
     }}
 
 
+
+    export async function buscarGruposPorPalabras(queryText: string) {
+        try {
+            const grupos: unknown[] = [];
+        
+            // Convertir el texto de búsqueda en un array de palabras
+            const palabras = queryText.trim().split(/\s+/);
+        
+            // Realizar una consulta por cada palabra de búsqueda y fusionar los resultados
+            await Promise.all(palabras.map(async palabra => {
+                const q = query(collection(database, 'groups'), where('name', "in", palabra));
+                const querySnapshot = await getDocs(q);
+                
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    const group = new Group(data.name, data.description, data.members, doc.id);
+                    grupos.push(group);
+                });
+            }));
+            console.log(grupos)
+    
+            return grupos;
+        } catch (error) {
+            console.error("Error al buscar grupos:", error);
+            return [];
+        }
+    }

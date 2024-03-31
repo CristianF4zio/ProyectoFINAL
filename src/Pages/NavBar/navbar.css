@@ -1,0 +1,25 @@
+.navbar {
+    color: white;
+    padding: 1rem;
+    background-color: #F55800;
+
+}
+a{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+li:hover{
+    color: #F55800;
+    background-color: white;
+    border-radius: 10px;
+}
+.metro{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.metro:hover{
+    color: #F55800;
+    background-color: white;
+    border-radius: 10px;
+}

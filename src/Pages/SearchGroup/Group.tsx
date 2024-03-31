@@ -1,28 +1,15 @@
-import React from 'react';
-import User from './User';
+import User from "../../Class/User";
 
-interface GroupProps {
-    group: Group;
-}
-
-class Group {
+export  default class Group {
     name: string;
     description: string;
     members: User[];
     id: string;
-    icon: string;
-    constructor(name: string, description: string, members: User[], id: string, icon: string) {
+    constructor(name: string, description: string, members: User[], id: string) {
         this.name = name;
         this.description = description;
         this.members = members;
         this.id = id;      
-        this.icon = icon;
-    }
-    getIcon() {
-        return this.icon;
-    }
-    setIcon(icon: string) {
-        this.icon = icon;
     }
     getName() {
         return this.name;
@@ -84,32 +71,6 @@ class Group {
     getMembersPasswords() {
         return this.members.map((m) => m.getPassword());
     }
+   
+
 }
-
-const GroupCard: React.FC<GroupProps> = ({ group }) => {
-    return (
-        <div className="card">
-            <img src={group.getIcon()} alt={group.getName()} className="group-icon" />
-            <div className="group-name">{group.getName()}</div>
-            <div className="group-description">{group.getDescription()}</div>
-        </div>
-    );
-};
-
-const App: React.FC = () => {
-    const groups: Group[] = [
-        new Group('Grupo 1', 'Descripción del Grupo 1', [], '1', 'ruta/a/imagen_grupo_1.png'),
-        new Group('Grupo 2', 'Descripción del Grupo 2', [], '2', 'ruta/a/imagen_grupo_2.png'),
-        // Agregar más grupos si es necesario
-    ];
-
-    return (
-        <div id="root">
-            {groups.map((group) => (
-                <GroupCard key={group.getId()} group={group} />
-            ))}
-        </div>
-    );
-};
-
-export default App;

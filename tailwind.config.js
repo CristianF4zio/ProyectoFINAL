@@ -1,6 +1,5 @@
-import { nextui } from "@nextui-org/react";
-import daisyui from "daisyui"; // Assuming daisyui exports as default
-
+/** @type {import('tailwindcss').Config} */
+const { nextui } = require("@nextui-org/react");
 export default {
   content: [
     "./index.html",
@@ -10,9 +9,9 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [daisyui, nextui()],
+  plugins: [require("daisyui"),nextui()],
   daisyui: {
     themes: ["light", "dark", "cupcake"],
   },
   darkMode: "class",
-};
+}
