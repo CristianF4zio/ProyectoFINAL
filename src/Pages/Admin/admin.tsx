@@ -1,7 +1,7 @@
 import { Input, MenuItem, Select, Textarea } from "@nextui-org/react";
 
 import React, { useEffect, useState } from "react";
-import { addGroup, mostrarTopic, uploadTopic } from "../../components/autent";
+import { addGroup, deleteTopic, mostrarTopic, uploadTopic } from "../../components/autent";
 import Topic from "../../Class/Topic";
 
 export function AdminHome() {
@@ -13,6 +13,7 @@ export function AdminHome() {
   const [error, setError] = useState<string | null>(null);
   const [nameTopic, setnameTopic]= useState('');
   const [descriptionTopic, setDescriptionTopic]= useState('');
+  const [topicIdDelete, setTopicIdDelete]= useState('');
   
   useEffect(() => {
     mostrarTopic()
@@ -55,7 +56,12 @@ setTopics(topics.map(topic => new Topic( topic.getName(), topic.getDescription()
     console.log("Agregar Topico");
     uploadTopic(nameTopic, descriptionTopic)
   };
-
+const handleAcctionDe = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    deleteTopic(topicIdDelete)
+    console.log(topicIdDelete);
+    console.log("Eliminar Topico");
+  }
   return (
     <div className="flex w-full flex-col mt-10 items-center">
       <h1> Create Group</h1>
@@ -139,6 +145,26 @@ setTopics(topics.map(topic => new Topic( topic.getName(), topic.getDescription()
         
           <div className="form-control mt-6">
             <button className="btn btn-primary" onClick={handleAcctionAd2}>Agregar Topico</button>
+          </div>
+        </form>
+      </div>
+      <h1> Elimnar Topic</h1>
+      <div className="card shrink-0 w-full max-w-sm  bg-base-100 mt-5 gap-4">
+        <form className="card-body">
+          <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <Input
+              key="outside"
+              type="text"
+              label="Name"
+              labelPlacement="outside"
+              placeholder="Enter their name"
+              value={topicIdDelete}
+              onChange={(ev) => setTopicIdDelete(ev.target.value)}
+            />
+          </div>
+        
+          <div className="form-control mt-6">
+            <button className="btn btn-primary" onClick={handleAcctionDe}>Eliminar Topico</button>
           </div>
         </form>
       </div>

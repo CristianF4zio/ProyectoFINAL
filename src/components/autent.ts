@@ -1,4 +1,4 @@
-import { DocumentData } from "@firebase/firestore";
+import { DocumentData, deleteDoc } from "@firebase/firestore";
 
 
 import { addDoc, collection, doc,  getDoc,  getDocs,  orderBy,  query,  setDoc, updateDoc, where } from "@firebase/firestore";
@@ -331,5 +331,44 @@ export async function addGroup(name: string, description: string, n: File, topic
         } catch (error) {
             console.error("Error al subir el tema:", error);
             throw error; // Re-lanzar el error para que se maneje en el lugar donde se llama a esta función
+        }
+    }
+    export async function deleteTopic(identifier: string): Promise<void> {
+        try {
+            let topicRef;
+            if (identifier.length == 20) { // Si la longitud es menor o igual a 20, asumimos que es un ID
+                topicRef = doc(database, 'topics', identifier);
+                console.log("aca")
+            } else { // De lo contrario, asumimos que es un nombre de tema
+                const querySnapshot = await getDocs(query(collection(database, 'topics'), where('name', '==', identifier)));
+                if (querySnapshot.empty) {
+                    throw new Error('No se encontró ningún tema con el nombre especificado');
+                }
+                console.log("Entra para el san")
+                console.log(querySnapshot.docs)
+                // Solo debería haber un documento que coincida con el nombre, por lo que tomamos el primero
+                topicRef = querySnapshot.docs[0].ref;
+            }
+    
+            if (topicRef) {
+                console.log("entra al if")
+                // Eliminar los grupos asociados al tema
+                const groupQuerySnapshot = await getDocs(query(collection(database, 'groups'), where('topic', '==', topicRef.id)));
+                groupQuerySnapshot.forEach(async (doc) => {
+                    await deleteDoc(doc.ref);
+                    console.log("Grupo asociado al tema eliminado correctamente:", doc.id);
+                });
+    
+                // Eliminar el tema
+                await deleteDoc(topicRef);
+                console.log("Tema eliminado correctamente");
+
+            } else {
+                console.log("No se encontró ningún tema con el identificador especificado");
+
+            }
+        } catch (error) {
+            console.error("Error al eliminar el tema:", error);
+            throw error;
         }
     }
