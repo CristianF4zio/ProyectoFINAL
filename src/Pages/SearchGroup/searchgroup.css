@@ -26,7 +26,7 @@
     padding: 10px 20px; /* Ajusta el espacio interno */
     font-size: 16px; /* Ajusta el tamaño del texto */
     cursor: pointer;
-    background-color: #023E7f; /* Cambia el color de fondo del botón */
+    background-color: #001a35; /* Cambia el color de fondo del botón */
     color: white; /* Cambia el color del texto del botón */
     border: none; /* Elimina el borde */
 }

@@ -6,6 +6,7 @@ export const reserveURL = "/reserve/:movieId"
 export const adminURL = "/admin"
 export const movieURL = "/movie"
 export const groupURL = "/group"
+export const groupDetailURL = "/group/:groupId"
 
 export const urls = [
     'https://www.unimet.edu.ve/wp-content/uploads/2023/12/FOTOS-CAMPUS-2023-24-1-980x653.jpg',

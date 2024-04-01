@@ -1,40 +1,91 @@
-import { SetStateAction, useState } from "react";
-import "./searchgroup.css"; // Asegúrate de importar el archivo CSS
+import { Button } from "@nextui-org/react";
+import { useState } from "react";
+import {  searchGroups, updateGroupMembers } from "../../components/autent";
+import Group from "../../Class/Group";
+import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../../Context/contex";
+import GroupCard from "../../components/Card";
+
 
 export function GroupSearch() {
+    const [componentKey, setComponentKey] = useState(0);
+    const {user}=useAuth()
     const [query, setQuery] = useState('');
-    const [resultados] = useState<any[]>([]);
+    const [resultados, setResultados] = useState<Group[]>([]);
 
-    const handleInputChange = (event: { target: { value: SetStateAction<string>; }; }) => {
-        setQuery(event.target.value);
-    };
+    const navigate = useNavigate();
 
-    const handleSubmit = async (event: { preventDefault: () => void; }) => {
-        event.preventDefault();
-        // const gruposEncontrados = await buscarGruposPorPalabras(query);
-        // setResultados(gruposEncontrados);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      setIsLoading(true); // Activar el estado de carga
+  
+      try {
+        const gruposEncontrados = await searchGroups(query);
+        setResultados(gruposEncontrados);
+        setComponentKey(prevKey => prevKey + 1);
+      } catch (error) {
+        console.error('Error al buscar grupos:', error);
+        // Manejar el error, por ejemplo, mostrar un mensaje al usuario
+      }
+  
+      setIsLoading(false); // Desactivar el estado de carga después de obtener los resultados
+      
     };
+    const handleGoProfileGroup = (grupo : Group) => {
+        const url = `/group/${grupo.getId()}`; // Construye la URL utilizando el ID del grupo
+        navigate(url); // Navega a la URL
+console.log('hola')
+
+    }
+    const handleAfiliacion = (grupo: Group) => {
+        // Aquí puedes agregar la lógica para afiliar al usuario al grupo
+        if(user){
+        const existingMember = grupo.getMembers().find((member) => member.getEmail() === user.getEmail());
+
+        if (existingMember) {
+            console.log("El usuario ya está afiliado al grupo.");
+            // Puedes manejar aquí el caso en el que el usuario ya esté afiliado al grupo
+        } else {
+          user.setMember(true);
+            console.log("Usuario afiliado al grupo:", user);
+            grupo.addMember(user);
+            updateGroupMembers(grupo.getId(),grupo.getMembers())
+          
+
+            // Aquí puedes agregar la lógica para afiliar al usuario al grupo
+            // Por ejemplo, puedes enviar una solicitud al servidor para afiliar al usuario al grupo
+        }}}
 
     return (
-        <div className="group-search-container">
-            <form className="group-search-form" onSubmit={handleSubmit}>
-                <input
-                    className="group-search-input"
-                    type="text"
-                    value={query}
-                    onChange={handleInputChange}
-                    placeholder="Buscar grupos por nombre o descripción"
-                />
-                <button className="group-search-button" type="submit">Buscar</button>
-            </form>
-            <ul>
-                {resultados.map((grupo) => (
-                    <li key={grupo.id}>
-                        <h3>{grupo.name}</h3>
-                        <p>{grupo.description}</p>
-                    </li>
-                ))}
-            </ul>
+     
+        <div className="flex items-center h-screen w-screen mt-10 flex-col">
+        <form onSubmit={handleSubmit}>
+          <input 
+            type="text" 
+            className="border border-gray-300 rounded-full px-4 py-1 focus:outline-none focus:border-blue-500 transition-colors duration-300"
+            value={query} 
+            onChange={(ev) => setQuery(ev.target.value)}
+            placeholder="Buscar grupos..."
+          />
+          <Button size="sm" color="primary" radius="lg" type="submit">Buscar</Button>
+        </form>
+        
+        {isLoading && <div>Cargando...</div>}
+        
+        <ul className="flex flex-col flex-wrap gap-4 mt-7 sm:flex-row md:flex-row">
+          {resultados.map((grupo) => (
+            <GroupCard
+                            key={grupo.id}
+                            grupo={grupo}
+                            handleGoProfileGroup={handleGoProfileGroup}
+                            handleAfiliacion={handleAfiliacion}
+                          />
+          ))}
+        </ul>
         </div>
-    );
+        );
+        
 }
