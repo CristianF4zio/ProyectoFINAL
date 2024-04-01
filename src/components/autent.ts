@@ -52,7 +52,9 @@ export async function signUp(user: User, n: File): Promise<string | null> {
         // Devuelve el ID del usuario creado
         return userId;
     } catch (error) {
+    
         console.error("Error al registrar usuario:", error);
+        return null;
         throw new Error("Error al registrar usuario.");
     }
 }

@@ -23,7 +23,7 @@ export function NavBar() {
         <a className="btn btn-ghost text-white text-2xl">MetroVibe</a>
       </div>
       <div className="flex-none">
-        <ul className="menu menu-horizontal  px-1 text-white text-2xl">
+        <ul className="menu menu-horizontal  px-1 text-white text-2">
           <li > <Link to={homeURL}>Home</Link></li>
           <PrivateRouteUser>
             <li > <Link to={loginURL}>Login</Link></li>

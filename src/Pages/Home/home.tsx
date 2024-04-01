@@ -50,10 +50,10 @@ export function Home() {
         </div>
       </div>
 
-      <div className='flex justify-center gap-9 mt-10'>
+      <div className='flex flex-col justify-center gap-2 items-center  lg:flex-row'>
         <div className="card w-96 bg-orange shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-5xl">Obejetivo</h2>
+            <h2 className="card-title text-5xl">Objetivo</h2>
             <p className='text-2xl'>Desarrollar una plataforma web para gestionar Agrupaciones Estudiantiles dentro de la Universidad Metropolitana. Mejorar la experiencia al facilitar la participación y contribución de los estudiantes en grupos afines a sus intereses y preferencias.
             </p>
             <div className="card-actions justify-end">
