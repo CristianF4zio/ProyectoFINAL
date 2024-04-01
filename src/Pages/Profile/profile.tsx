@@ -19,8 +19,10 @@ export function Profile() {
 const handleSummit = () => {
  
   if (user) {
-    const newUserData = new User(newname, newlastname, newemail, user.getPassword(), user.getIcon(), false);
+    const newUserData = new User(newname, newlastname, newemail, user.getPassword(), user.getIcon(), user.getMember());
     updateUserProfile(newUserData)
+    user.setName(newname);
+    user.setLastName(newlastname);
     
     setComponentKey(prevKey => prevKey + 1);
   }
@@ -72,12 +74,7 @@ const handleSummit = () => {
         </div>
         <input type="text" placeholder="Type here" className="input input-bordered max-w-xs" value={newlastname} onChange={(ev) => setNewlastname(ev.target.value)} />
       </label>
-      <label className="form-control">
-        <div className="label">
-          <span className="label-text">Email</span> 
-        </div>
-        <input type="text" placeholder="Type here" className="input input-bordered max-w-xs" value={newemail} onChange={(ev) => setNewemail(ev.target.value)}/>
-      </label>
+     
     </div>
 
   </div>

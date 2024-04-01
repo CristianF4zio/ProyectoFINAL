@@ -88,6 +88,11 @@ export  default class Group {
     getMembersPasswords() {
         return this.members.map((m) => m.getPassword());
     }
-   
-
+    getValidateUser(email: string, password: string): boolean {
+        // Buscar un miembro cuyo correo electrónico y contraseña coincidan con los proporcionados
+        const user = this.members.find((m) => m.getEmail() === email && m.getPassword() === password);
+        
+        // Si se encontró un usuario, devolver true; de lo contrario, devolver false
+        return user ? true : false;
+    }
 }

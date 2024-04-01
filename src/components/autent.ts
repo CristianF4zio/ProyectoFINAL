@@ -1,9 +1,9 @@
-import { DocumentData, deleteDoc } from "@firebase/firestore";
+import { DocumentData, arrayUnion, deleteDoc  } from "@firebase/firestore";
 
 
-import { addDoc, collection, doc,  getDoc,  getDocs,  orderBy,  query,  setDoc, updateDoc, where } from "@firebase/firestore";
+import { addDoc, collection, doc,  getDoc,  getDocs,query,  setDoc, updateDoc, where } from "@firebase/firestore";
 import {   auth, database, storage} from "./firebase"
-import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, updateEmail, verifyBeforeUpdateEmail} from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, verifyBeforeUpdateEmail} from "firebase/auth";
 import User from "../Class/User";
 import { ref, uploadBytes, getDownloadURL } from "@firebase/storage";
 import Group from "../Class/Group";
@@ -107,6 +107,7 @@ export async function signInWithEmailAndPasswordAndFetchUserData(email: string, 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password); // Autenticar al usuario
       if (!userCredential) {
+        await sendEmailVerification(userCredential);
         return false;
     }
     if (userCredential.user) {
@@ -198,7 +199,7 @@ export async function updateUserProfile( newUserData: User){
         console.log(user)
         if (user !== null) {
             try{
-            await verifyBeforeUpdateEmail(user,newUserData.getEmail());
+         
  
             console.log(user)
           
@@ -212,7 +213,6 @@ export async function updateUserProfile( newUserData: User){
         await updateDoc(userRef, {
             name: newUserData.getName(),
             lastname: newUserData.getLastName(),
-            email: newUserData.getEmail()
           });
       
        
@@ -336,39 +336,249 @@ export async function addGroup(name: string, description: string, n: File, topic
     export async function deleteTopic(identifier: string): Promise<void> {
         try {
             let topicRef;
-            if (identifier.length == 20) { // Si la longitud es menor o igual a 20, asumimos que es un ID
+            if (identifier.length == 20) {
+                // Si la longitud es menor o igual a 20, asumimos que es un ID
                 topicRef = doc(database, 'topics', identifier);
-                console.log("aca")
-            } else { // De lo contrario, asumimos que es un nombre de tema
+            } else {
+                // De lo contrario, asumimos que es un nombre de tema
                 const querySnapshot = await getDocs(query(collection(database, 'topics'), where('name', '==', identifier)));
                 if (querySnapshot.empty) {
                     throw new Error('No se encontró ningún tema con el nombre especificado');
                 }
-                console.log("Entra para el san")
-                console.log(querySnapshot.docs)
                 // Solo debería haber un documento que coincida con el nombre, por lo que tomamos el primero
                 topicRef = querySnapshot.docs[0].ref;
             }
     
             if (topicRef) {
-                console.log("entra al if")
                 // Eliminar los grupos asociados al tema
                 const groupQuerySnapshot = await getDocs(query(collection(database, 'groups'), where('topic', '==', topicRef.id)));
                 groupQuerySnapshot.forEach(async (doc) => {
-                    await deleteDoc(doc.ref);
-                    console.log("Grupo asociado al tema eliminado correctamente:", doc.id);
+                    // Verificar si el grupo tiene miembros
+                    const groupData = doc.data();
+                    if (groupData.members.length === 0) {
+                        await deleteDoc(doc.ref);
+                        console.log("Grupo asociado al tema eliminado correctamente:", doc.id);
+                    }
                 });
     
                 // Eliminar el tema
                 await deleteDoc(topicRef);
                 console.log("Tema eliminado correctamente");
-
             } else {
                 console.log("No se encontró ningún tema con el identificador especificado");
-
             }
         } catch (error) {
             console.error("Error al eliminar el tema:", error);
             throw error;
         }
+    }
+    export async function deleteGroup(identifier: string): Promise<void> {
+        try {
+            let groupRef;
+            if (identifier.length == 20) {
+                // Si la longitud es igual a 20, asumimos que es un ID
+                groupRef = doc(database, 'groups', identifier);
+            } else {
+                // De lo contrario, asumimos que es un nombre de grupo
+                const querySnapshot = await getDocs(query(collection(database, 'groups'), where('name', '==', identifier)));
+                if (querySnapshot.empty) {
+                    throw new Error('No se encontró ningún grupo con el nombre especificado');
+                }
+                // Solo debería haber un documento que coincida con el nombre, por lo que tomamos el primero
+                groupRef = querySnapshot.docs[0].ref;
+            }
+    
+            if (groupRef) {
+                // Obtener los datos del grupo
+                const groupDoc = await getDoc(groupRef);
+                const groupData = groupDoc.data();
+                if (groupData && groupData.members.length === 0) {
+                    // Si el grupo no tiene miembros, eliminarlo
+                    await deleteDoc(groupRef);
+                    console.log("Grupo eliminado correctamente");
+                } else {
+                    console.log("No se puede eliminar el grupo porque tiene miembros");
+                }
+            } else {
+                console.log("No se encontró ningún grupo con el identificador especificado");
+            }
+        } catch (error) {
+            console.error("Error al eliminar el grupo:", error);
+            throw error;
+        }
+    }
+    
+
+
+  export async function searchGroups(searchQuery: string) {
+    const groupsRef = collection(database, 'groups');
+
+    try {
+        const querySnapshot = await getDocs(groupsRef);
+        const results: any[] = [];
+
+        querySnapshot.forEach(async doc => {
+            const data = doc.data();
+            if (data && data.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+                const img= await getImageUrl(doc.id, data.icon);
+                const topic = await getTopicById(data.topic)
+                if(img&& topic){
+
+                    const members = await getMembersByIds(data.members);
+
+                    // Crear el objeto Group con los IDs de los miembros
+                    const group = new Group(data.name, data.description, members, doc.id, img, topic);
+                    results.push(group);
+            }
+            }
+        });
+
+        return results;
+    } catch (error) {
+        console.error('Error al buscar grupos:', error);
+        throw error;
+    }
+};
+export async function getTopicById(topicId: string): Promise<Topic | null> {
+    try {
+        const topicDoc = doc(database, 'topics', topicId);
+        const topicSnap = await getDoc(topicDoc);
+        
+        if (topicSnap.exists()) {
+            const topicData = topicSnap.data();
+            if (topicData) {
+                // Aquí podrías crear una instancia de la clase Topic usando los datos recuperados
+                // Suponiendo que la clase Topic tiene un constructor adecuado
+                return new Topic(topicData.name, topicData.description,  topicData.id);
+            }
+        }
+        
+        return null; // Si el documento no existe o no tiene datos, devolvemos null
+    } catch (error) {
+        console.error('Error al obtener el tema:', error);
+        throw error;
+    }
+}
+export async function getGroupById(groupId: string) {
+    try {
+        // Construye una referencia al documento del grupo utilizando su ID
+        const groupDocRef = doc(database, 'groups', groupId);
+
+        // Obtén los datos del documento
+        const groupDocSnap = await getDoc(groupDocRef);
+
+        // Verifica si el documento existe
+        if (groupDocSnap.exists()) {
+            // Obtén los datos del grupo
+            const data = groupDocSnap.data();
+
+            // Obtén la URL de la imagen
+            const imgUrl = await getImageUrl(groupId, data.icon);
+
+            // Obtén el objeto Topic asociado al grupo
+            const topic = await getTopicById(data.topic);
+
+            // Verifica si se obtuvieron la URL de la imagen y el objeto Topic correctamente
+            if (imgUrl && topic) {
+                const members = await getMembersByIds(data.members);
+
+                // Crear el objeto Group con los IDs de los miembros
+           
+                const group = new Group(data.name, data.description, members, groupId, imgUrl, topic);
+                return group;
+            } else {
+                // Si falta algún dato, devuelve null
+                return null;
+            }
+        } else {
+            // Si el documento no existe, devuelve null
+            return null;
+        }
+    } catch (error) {
+        console.error('Error al obtener el grupo por ID:', error);
+        throw error;
+    }
+}
+export function getUserId() {
+    const user = auth.currentUser;
+    if (user) {
+      return user.uid; // Devuelve el ID del usuario
+    } else {
+      return null; // Si no hay usuario autenticado, devuelve null
+    }}
+    export async function updateGroupMembers(groupId: string, members: User[]) {
+        try {
+          const memberIds = await Promise.all(members.map(async (member) => {
+            // Aquí debes realizar la consulta para obtener el ID del usuario
+            // Supongamos que tienes una función llamada `getUserIdByEmail` que busca el ID del usuario por su correo electrónico
+            const userId = await getUserIdByEmail(member.email);
+            return userId;
+          }));
+      
+          // Obtener una referencia al documento del grupo específico que deseas actualizar
+          const groupRef = doc(database, 'groups', groupId);
+      
+          // Actualizar los datos del grupo en Firestore con los IDs de los miembros
+          await updateDoc(groupRef, { members: arrayUnion(...memberIds) });
+      
+          console.log('Miembros del grupo actualizados correctamente');
+        } catch (error) {
+          console.error('Error al actualizar los miembros del grupo:', error);
+        }
+      };
+      async function getUserIdByEmail(email: string): Promise<string | null> {
+        try {
+          // Realizar una consulta para encontrar el usuario con el correo electrónico proporcionado
+          const usersCollection = collection(database, 'users');
+          const userQuery = query(usersCollection, where('email', '==', email));
+          const querySnapshot = await getDocs(userQuery);
+      
+          // Verificar si se encontró algún usuario con el correo electrónico dado
+          if (querySnapshot.empty) {
+            // No se encontró ningún usuario con el correo electrónico proporcionado
+            return null;
+          } else {
+            // Se encontró al menos un usuario, retornar el ID del primer usuario encontrado
+            const userId = querySnapshot.docs[0].id;
+            return userId;
+          }
+        } catch (error) {
+          console.error('Error al buscar el ID del usuario por correo electrónico:', error);
+          return null;
+        }
+      }
+      async function getMembersByIds(memberIds: string[]): Promise<User[]> {
+        const members: User[] = [];
+        try {
+            for (const memberId of memberIds) {
+                const user = await getUserById(memberId);
+                if (user) {
+                    members.push(user);
+                }
+            }
+        } catch (error) {
+            console.error('Error al obtener usuarios por ID:', error);
+        }
+        return members;
+    }
+    
+    async function getUserById(userId: string): Promise<User | null> {
+        try {
+            const userDoc = await getDoc(doc(database, 'users', userId));
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                const imageUrl = await getImageUrl(userId, userData.iconref);
+                if (imageUrl) {
+                    const user = new User(userData.name, userData.lastname ,userData.email, userData.password, imageUrl, userData.member);
+                    return user;
+            } else {
+                console.error('No se encontró ningún usuario con el ID proporcionado:', userId);
+                return null;
+            }
+        }
+        } catch (error) {
+            console.error('Error al obtener usuario por ID:', error);
+            return null;
+        }
+        return null;
     }
