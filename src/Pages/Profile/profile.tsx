@@ -31,20 +31,8 @@ const handleSummit = () => {
   }
     
     return (
-        // <div> 
-        //  <div className="hero min-h-screen bg-base-200">
-        //     <div className="hero-content flex-col lg:flex-row-reverse">
-        //         <img src={user?.getIcon()} className="max-w-sm rounded-lg shadow-2xl" />
-        //         <div>
-        //         <h1 className="text-5xl font-bold">{user?.getName()}</h1>
-        //         <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
-        //         <button className="btn btn-primary">Get Started</button>
-        //         </div>
-        //     </div>
-        // </div>
-        // </div>
 <div className="relative top-10 ">
-  <h1>Profile</h1>
+  <h1>Perfil de Usuario</h1>
 <div className="mx-auto p-4 flex items-center justify-center mt-20 gap-9   md:flex-row lg: flex-row ">
 <Card className="py-5">
 <CardBody className="overflow-visible py-2 flex items-center">
@@ -57,20 +45,20 @@ const handleSummit = () => {
       </CardBody>
       <CardHeader className="pb-0 pt-2 px-4 flex-col ">
         <p className="text-tiny  font-bold"> </p>
-        <small className="text-default-500">{user?.getEmail()}</small>
-        <h4 className="font-bold text-large"> {user?.getName()} {user?.getLastName()} </h4>
+        <small className="text-default-500 text-black">{user?.getEmail()}</small>
+        <h4 className="font-bold text-large">Bienvenido {user?.getName()} {user?.getLastName()} </h4>
       </CardHeader>
   <div className="bg-grays"> 
     <div className="grid grid-cols-2 gap-4  p-4"> 
       <label className="form-control">
         <div className="label">
-          <span className="label-text">Name</span>
+          <span className="label-text text-black">Cambio de Nombre</span>
         </div>
         <input type="text" placeholder="Type here" className="input input-bordered max-w-xs"value={newname} onChange={(ev) => setNewname(ev.target.value)} />
       </label>
       <label className="form-control">
         <div className="label">
-          <span className="label-text">Last name</span>
+          <span className="label-text text-black">Cmabio de apellido</span>
         </div>
         <input type="text" placeholder="Type here" className="input input-bordered max-w-xs" value={newlastname} onChange={(ev) => setNewlastname(ev.target.value)} />
       </label>

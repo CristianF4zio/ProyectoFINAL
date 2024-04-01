@@ -38,8 +38,8 @@ export function Home() {
           <div className="hero-content flex-col  lg:flex-row">
             <img src="https://i.ibb.co/Vj4pdbj/pngwing-com.png" className="max-w-sm rounded-lg " />
 
-            <div className='text-black '>
-              <h1 className="font-900 text-5xl">Quienes somos?</h1>
+            <div className='text-black    '>
+              <h1 className="font-900  text-5xl">Quienes somos?</h1>
               <div className=' w-96 '>
                 <p className="py-6 text-2xl">Somos un grupo diverso de estudiantes comprometidos con el crecimiento personal y colectivo. En nuestra comunidad, fomentamos el liderazgo, la colaboración y el servicio. Nos esforzamos por promover un ambiente inclusivo donde cada voz tenga el poder de generar un cambio positivo. ¡Únete a nosotros para hacer una diferencia en nuestra universidad y más allá!
 
