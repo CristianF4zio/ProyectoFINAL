@@ -38,7 +38,7 @@ export function Home() {
           <div className="hero-content flex-col  lg:flex-row">
             <img src="https://i.ibb.co/XDz0Jrn/pngwing-com-1.png" className="max-w-sm rounded-lg " />
 
-            <div className='text-black    '>
+            <div className='text-black'>
               <h1 className="font-900  text-5xl">Quienes somos?</h1>
               <div className=' w-96 '>
                 <p className="py-6 text-2xl">Somos un grupo diverso de estudiantes comprometidos con el crecimiento personal y colectivo. En nuestra comunidad, fomentamos el liderazgo, la colaboración y el servicio. Nos esforzamos por promover un ambiente inclusivo donde cada voz tenga el poder de generar un cambio positivo. ¡Únete a nosotros para hacer una diferencia en nuestra universidad y más allá!
@@ -66,7 +66,7 @@ export function Home() {
         <div className="card w-96 bg-orange shadow-xl ">
           <div className="card-body">
             <h2 className="card-title text-5xl">Misión</h2>
-            <p className='text-2xl'>Proporcionar un centro integral de información, comunicación y participación para los miembros de la comunidad universitaria. Buscando un impacto positivo y duradero en la vida estudiantil. A través de eventos, recursos y colaboraciones, se espera promover la inclusión, y contribuir al desarrollo integral de una comunidad, permitiendo el desarrollo de sus habilidades, intereses y competencias, enriqueciendo su experiencia universitaria.
+            <p className='text-2xl'>Proporcionar un centro integral de información, comunicación y participación para los miembros de la comunidad universitaria. Buscando un impacto positivo y duradero en la vida estudiantil.
             </p>
             <div className="card-actions justify-end">
 
@@ -76,8 +76,9 @@ export function Home() {
 
         <div className="card w-96 bg-orange shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-5xl">Misión</h2>
-            <p className='text-2xl'>Proporcionar un centro integral de información, comunicación y participación para los miembros de la comunidad universitaria. Buscando un impacto positivo y duradero en la vida estudiantil. A través de eventos, recursos y colaboraciones, se espera promover la inclusión, y contribuir al desarrollo integral de una comunidad, permitiendo el desarrollo de sus habilidades, intereses y competencias, enriqueciendo su experiencia universitaria.
+            <h2 className="card-title text-5xl">Visión</h2>
+            <p className='text-2xl'>Nuestra visión es crear una plataforma inclusiva y diversa que conecte a personas apasionadas por diferentes intereses y actividades. Queremos ofrecer un espacio donde los usuarios puedan descubrir, unirse y participar en una amplia variedad de agrupaciones, desde clubes deportivos hasta grupos de música, arte, voluntariado y más. 
+
             </p>
             <div className="card-actions justify-end">
 
