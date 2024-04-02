@@ -36,7 +36,7 @@ const handleRegister = async (event: React.MouseEvent<HTMLButtonElement, MouseEv
         return;
 }
 const namefile= file?.name;
-    const user = new User(  name, lastName ,email, password, namefile ||"" , false);
+    const user = new User(  name, lastName ,email.toLowerCase(), password, namefile ||"" , false);
     const id = file ? signUp(user, file) : null;
     console.log(id)
     if (await id) {
@@ -65,8 +65,9 @@ const handleAccept = () => {
       const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
           // Almacena todos los archivos seleccionados en el estado files
+        
           setFile(event.target.files[0]);
-          
+        console.log(event.target.files[0])  
           // También puedes realizar otras operaciones con los archivos aquí si es necesario
         }
       };

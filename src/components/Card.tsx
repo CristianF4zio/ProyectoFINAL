@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardBody, Button,Image } from '@nextui-org/react';
-import React, { ReactElement } from 'react';
+import  { ReactElement } from 'react';
 import Group from '../Class/Group';
 
  // Importa los componentes necesarios

@@ -3,7 +3,7 @@ import { DocumentData, arrayUnion, deleteDoc  } from "@firebase/firestore";
 
 import { addDoc, collection, doc,  getDoc,  getDocs,query,  setDoc, updateDoc, where } from "@firebase/firestore";
 import {   auth, database, storage} from "./firebase"
-import { createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, verifyBeforeUpdateEmail} from "firebase/auth";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, signInWithPopup} from "firebase/auth";
 import User from "../Class/User";
 import { ref, uploadBytes, getDownloadURL } from "@firebase/storage";
 import Group from "../Class/Group";
@@ -584,3 +584,49 @@ export function getUserId() {
         }
         return null;
     }
+    
+    export default async function signUpWithGoogle() {
+        try {
+          const googleProvider = new GoogleAuthProvider();
+          const result = await signInWithPopup(auth, googleProvider);
+      
+          // Extraer el nombre y el apellido del usuario si está disponible
+          const name = result.user.displayName ? result.user.displayName.split(' ') : ['', ''];
+      
+          // Obtener una referencia al documento del usuario en Firestore
+          const userRef = doc(database, 'users', result.user.uid);
+      
+          // Verificar si el usuario ya existe en Firestore
+          const docSnapshot = await getDoc(userRef);
+      
+          if (!docSnapshot.exists()) {
+            // Si el usuario no existe, crear un nuevo documento con sus datos
+            await setDoc(userRef, {
+              name: name[0],
+              lastname: name[1],
+              password: "",
+              email: result.user.email,
+              member: [],
+              // Obtener el nombre del archivo de la URL de la imagen
+              icon: ""
+            }, { merge: true });
+          }
+      
+          // Subir la imagen de perfil y guardar la referencia en Firestore
+      
+          // Obtener los datos del documento recién creado o existente
+          const userData = docSnapshot.data();
+      
+          if (userData) {
+            const user = new User(userData.name, userData.lastname, userData.email, userData.password, userData.icon, userData.member);
+            // Devolver los datos del usuario
+            return user;
+          }
+        } catch (error) {
+          throw new Error(`Error al iniciar sesión con Google: ${(error as Error).message}`);
+        }
+      }
+      
+      // Función para extraer el nombre del archivo de una URL
+
+      

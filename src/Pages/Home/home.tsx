@@ -36,7 +36,7 @@ export function Home() {
       <div>
         <div className="hero  bg-white">
           <div className="hero-content flex-col  lg:flex-row">
-            <img src="https://i.ibb.co/Vj4pdbj/pngwing-com.png" className="max-w-sm rounded-lg " />
+            <img src="https://i.ibb.co/XDz0Jrn/pngwing-com-1.png" className="max-w-sm rounded-lg " />
 
             <div className='text-black    '>
               <h1 className="font-900  text-5xl">Quienes somos?</h1>
@@ -50,7 +50,7 @@ export function Home() {
         </div>
       </div>
 
-      <div className='flex flex-col justify-center gap-2 items-center  lg:flex-row'>
+      <div className='flex flex-col justify-center gap-2 items-center mt-10  lg:flex-row'>
         <div className="card w-96 bg-orange shadow-xl">
           <div className="card-body">
             <h2 className="card-title text-5xl">Objetivo</h2>

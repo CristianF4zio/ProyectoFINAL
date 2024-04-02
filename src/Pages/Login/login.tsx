@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import { registerURL } from "../../constants/url";
 import { Alert } from "../../components/alert";
 
-import { signInWithEmailAndPasswordAndFetchUserData } from "../../components/autent";
+import signUpWithGoogle, { signInWithEmailAndPasswordAndFetchUserData } from "../../components/autent";
 import { useAuth } from "../../Context/contex";
 import Admin from "../../Class/Admin";
 import { Input } from "@nextui-org/react";
 import { LoadingSpinner } from "../loading";
+
 
 
 export function Login() {
@@ -55,7 +56,7 @@ export function Login() {
       return;
     }
     try {
-      const id: any = await signInWithEmailAndPasswordAndFetchUserData(email, password);
+      const id: any = await signInWithEmailAndPasswordAndFetchUserData(email.toLowerCase(), password);
       if (id && id[1] == true && typeof id[0] !== 'string' && typeof id[0] !== 'boolean') {
         if (id[0] instanceof Admin) {
           login(id[0], true);
@@ -89,6 +90,20 @@ export function Login() {
     setShowAlert(false);
     return;
   }
+  const handleGoogle = async () => {
+    setIsLoading(true)
+    console.log("Google");
+    const user = await signUpWithGoogle()
+    if(user){
+      setIsLoading(false);
+      login(user, false);
+      navigate('/inicio');
+    }
+    else {
+      setIsLoading(false);
+      setError('Error al registrar usuario. Por favor, inténtalo de nuevo más tarde.');
+      setShowAlert(true);
+  }}
   return (
 
     <div className="">
@@ -145,7 +160,7 @@ export function Login() {
                   <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
 	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
                 </svg>
-                <span>Log in with Google</span>
+                <span onClick={handleGoogle}>Log in with Google</span>
               </div>
             </div>
           </div>

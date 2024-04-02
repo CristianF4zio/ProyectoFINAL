@@ -1,16 +1,17 @@
-import { Button, Card, CardBody, CardHeader,  Image } from "@nextui-org/react";
-import { SetStateAction, useState } from "react";
+import { Button } from "@nextui-org/react";
+import {  useState } from "react";
 import {  searchGroups, updateGroupMembers } from "../../components/autent";
 import Group from "../../Class/Group";
 import { useNavigate } from "react-router-dom";
 
-import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+// import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useAuth } from "../../Context/contex";
 import GroupCard from "../../components/Card";
 
 
 export function GroupSearch() {
     const [componentKey, setComponentKey] = useState(0);
+    console.log(componentKey)
     const {user}=useAuth()
     const [query, setQuery] = useState('');
     const [resultados, setResultados] = useState<Group[]>([]);
